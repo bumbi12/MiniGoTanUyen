@@ -237,7 +237,7 @@ window.viewNotes = async function(productId, productName) {
     tbody.innerHTML = '';
     
     if (snapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Chưa có dữ liệu nhập kho</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">Chưa có dữ liệu</td></tr>';
       return;
     }
     
