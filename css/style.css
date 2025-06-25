@@ -1,15 +1,49 @@
-:root {
-  /* 🎨 New color palette */
-  --primary-1: #ff6b6b;  /* Vibrant Coral */
-  --primary-2: #ff884b;  /* Orange Burst */
-  --accent-1: #ffd93d;   /* Sunflower Yellow */
-  --accent-2: #4ddbff;   /* Sky Blue */
-  --neutral-1: #f7f7f7;  /* Light Gray */
-  --neutral-2: #1e1e1e;  /* Charcoal */
+/* =============================
+   THEMEABLE UI COLORS & MOTIONS
+   ============================= */
 
-  /* Gradients */
+/*
+  👉 HOW TO SWITCH THEMES
+  -----------------------
+  Default palette = gray‑scale + subtle emerald.
+  Add class="theme-cn"   for Chinese deep‑tone palette.
+  Add class="theme-matcha" for Japanese matcha palette.
+*/
+
+:root {
+  /* Neutral base */
+  --black: #1e1e1e;
+  --white: #fafafa;
+  --gray-light: #e5e5e5;
+  --gray: #6c757d;
+
+  /* Default — Emerald on charcoal */
+  --primary-1: #198754;   /* Emerald */
+  --primary-2: #14532d;   /* Forest */
+  --accent-1: #4ddbff;    /* Sky */
+  --accent-2: #c7d2d9;    /* Mist */
+
+  /* Shared gradients */
+  --bg-gradient: linear-gradient(135deg, var(--black), var(--gray));
+  --card-gradient: linear-gradient(to bottom right, var(--white), var(--gray-light));
+}
+
+/* ===== Chinese 深色 (theme-cn) ===== */
+.theme-cn {
+  --primary-1: #174f4f;   /* Jade Shadow */
+  --primary-2: #582b18;   /* Clay Umber */
+  --accent-1: #b79f5a;    /* Antique Gold */
+  --accent-2: #386641;    /* Imperial Green */
   --bg-gradient: linear-gradient(135deg, var(--primary-1), var(--primary-2));
-  --card-gradient: linear-gradient(to bottom right, #ffffff, #fffaf0);
+}
+
+/* ===== Japanese 抹茶 (theme-matcha) ===== */
+.theme-matcha {
+  --primary-1: #4f726c;   /* Matcha */
+  --primary-2: #364a45;   /* Dark Matcha */
+  --accent-1: #afc8ad;    /* Light Matcha Cream */
+  --accent-2: #d8e3dc;    /* Wasabi Tint */
+  --bg-gradient: linear-gradient(135deg, var(--primary-1), var(--primary-2));
 }
 
 /* ──────────────── Logo ──────────────── */
@@ -27,7 +61,6 @@
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
 }
 
-/* Responsive logo */
 @media (max-width: 768px) {
   .logo { height: 50px; max-width: 150px; }
 }
@@ -48,13 +81,13 @@
 
 .app-header {
   background: var(--bg-gradient);
-  box-shadow: 0 4px 20px rgba(255, 139, 75, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
 }
 
 .app-header h1 {
   margin: 0;
   font-size: 1.6rem;
-  color: white;
+  color: var(--white);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.25);
 }
 @media (max-width: 768px) {
@@ -73,7 +106,7 @@
 
 .product-card:hover {
   transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 14px 28px rgba(255, 107, 107, 0.2);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
   animation: cardBounce 0.6s ease-in-out;
 }
 
@@ -81,31 +114,31 @@
 .btn-primary {
   background: linear-gradient(to right, var(--primary-1), var(--primary-2));
   border: none;
-  color: white;
+  color: var(--white);
   animation: pulseGlow 3s infinite;
 }
 
 .btn-info {
-  background: linear-gradient(to right, var(--accent-2), #00cfff);
+  background: linear-gradient(to right, var(--accent-2), var(--accent-1));
   border: none;
-  color: white;
+  color: var(--black);
 }
 
 .btn-danger {
-  background: linear-gradient(to right, var(--accent-1), #ffa600);
+  background: linear-gradient(to right, var(--accent-1), var(--primary-2));
   border: none;
-  color: #1e1e1e;
+  color: var(--black);
 }
 
 /* ──────────────── Form Elements ──────────────── */
 .search-input:focus {
   border-color: var(--accent-2);
-  box-shadow: 0 0 0 3px rgba(77, 219, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
 }
 
 .modal-header {
   background: var(--bg-gradient);
-  color: white;
+  color: var(--white);
 }
 
 /* ──────────────── Animations ──────────────── */
@@ -120,9 +153,9 @@
 }
 
 @keyframes pulseGlow {
-  0%   { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
-  70%  { box-shadow: 0 0 0 15px rgba(255, 107, 107, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  70%  { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
 }
 
 @keyframes cardBounce {
