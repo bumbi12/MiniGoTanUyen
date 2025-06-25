@@ -1,62 +1,130 @@
 :root {
-  --primary-color: #4361ee;
-  --secondary-color: #3f37c9;
-  --accent-color: #4895ef;
+  --primary-color: #7b2cbf; /* Màu tím chủ đạo */
+  --secondary-color: #5a189a;
+  --accent-color: #9d4edd;
   --light-color: #f8f9fa;
   --dark-color: #212529;
+  --text-color: #333;
+  --background: #f5f3ff;
 }
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
-  color: var(--dark-color);
+  background-color: var(--background);
+  color: var(--text-color);
 }
 
 .app-header {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
   padding: 1.5rem 0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(123, 44, 191, 0.2);
 }
 
 .header-content {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
 }
 
 .logo {
   height: 50px;
   width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
 .main-content {
   padding: 2rem 0;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.action-bar {
-  margin-bottom: 2rem;
+/* Phần tìm kiếm */
+.search-container {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
+.search-box {
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 30px;
+  border: 2px solid #e0aaff;
+  font-size: 1rem;
+  transition: all 0.3s;
+  padding-left: 45px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(157, 78, 221, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+}
+
+/* Nút thêm sản phẩm */
+.add-product-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.add-product-btn {
+  background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(123, 44, 191, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.add-product-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(123, 44, 191, 0.4);
+}
+
+/* Thẻ sản phẩm */
 .product-card {
-  border-radius: 12px;
+  border-radius: 15px;
   overflow: hidden;
   transition: all 0.3s ease;
   border: none;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   margin-bottom: 1.5rem;
+  background: white;
 }
 
 .product-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.12);
 }
 
 .card-img-top {
   height: 180px;
   object-fit: cover;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .card-body {
@@ -67,13 +135,18 @@ body {
   font-weight: 600;
   margin-bottom: 1rem;
   color: var(--dark-color);
+  font-size: 1.1rem;
 }
 
 .btn-action {
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 8px 15px;
   font-weight: 500;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .btn-primary {
@@ -86,37 +159,23 @@ body {
   border-color: var(--secondary-color);
 }
 
-.modal-content {
-  border-radius: 12px;
-  border: none;
+.btn-info {
+  background-color: #e0aaff;
+  border-color: #e0aaff;
+  color: var(--dark-color);
 }
 
-.table th {
-  background-color: var(--light-color);
+.btn-info:hover {
+  background-color: #c77dff;
+  border-color: #c77dff;
 }
 
-.loading-spinner {
-  display: inline-block;
-  width: 2rem;
-  height: 2rem;
-  vertical-align: text-bottom;
-  border: 0.25em solid currentColor;
-  border-right-color: transparent;
-  border-radius: 50%;
-  animation: spinner-border 0.75s linear infinite;
+/* Hiệu ứng loading */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes spinner-border {
-  to { transform: rotate(360deg); }
-}
-
-@media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .product-card {
-    margin-bottom: 1rem;
-  }
+.product-card {
+  animation: fadeIn 0.5s ease forwards;
 }
