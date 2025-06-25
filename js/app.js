@@ -124,7 +124,6 @@ async function addProduct() {
     alert("Lỗi khi thêm sản phẩm: " + error.message);
   }
 }
-
 window.openNoteModal = function(productId, productName) {
   const modalHTML = `
     <div class="modal-dialog">
@@ -137,15 +136,15 @@ window.openNoteModal = function(productId, productName) {
           <form id="noteForm">
             <div class="mb-3">
               <label class="form-label">Ngày *</label>
-              <input type="date" class="form-control" id="noteDate" required>
+              <input type="date" class="form-control" id="noteDate" required value="${new Date().toISOString().split('T')[0]}">
             </div>
             <div class="mb-3">
               <label class="form-label">Số lượng *</label>
-              <input type="number" class="form-control" id="noteQuantity" min="1" required>
+              <input type="number" class="form-control" id="noteQuantity" min="1" required value="1">
             </div>
             <div class="mb-3">
               <label class="form-label">Ghi chú</label>
-              <textarea class="form-control" id="noteRemarks" rows="3"></textarea>
+              <textarea class="form-control" id="noteRemarks" rows="3" placeholder="Nhập ghi chú..."></textarea>
             </div>
             <input type="hidden" id="currentProductId" value="${productId}">
           </form>
@@ -159,12 +158,8 @@ window.openNoteModal = function(productId, productName) {
   `;
   
   document.getElementById('productModal').innerHTML = modalHTML;
-  const modal = new bootstrap.Modal(document.getElementById('productModal'));
-  
-  document.getElementById('noteDate').valueAsDate = new Date();
-  modal.show();
+  new bootstrap.Modal(document.getElementById('productModal')).show();
 };
-
 window.saveNote = async function() {
   const productId = document.getElementById('currentProductId').value;
   const date = document.getElementById('noteDate').value;
