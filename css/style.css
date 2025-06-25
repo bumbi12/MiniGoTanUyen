@@ -11,7 +11,58 @@
   --bg-gradient: linear-gradient(135deg, var(--primary-1), var(--primary-2));
   --card-gradient: linear-gradient(to bottom right, #ffffff, #f0f4ff);
 }
+/* Logo styles */
+.logo {
+  height: 60px; /* Cố định chiều cao */
+  width: auto; /* Tự động tính chiều rộng giữ tỷ lệ */
+  object-fit: contain; /* Đảm bảo logo không bị biến dạng */
+  max-width: 180px; /* Giới hạn chiều rộng tối đa */
+  transition: transform 0.3s ease; /* Hiệu ứng khi hover */
+}
 
+.logo:hover {
+  transform: scale(1.05); /* Phóng to nhẹ khi hover */
+}
+
+/* Responsive logo */
+@media (max-width: 768px) {
+  .logo {
+    height: 50px;
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo {
+    height: 40px;
+    max-width: 120px;
+  }
+}
+
+/* Căn chỉnh header */
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap; /* Xuống dòng khi màn hình nhỏ */
+  justify-content: center; /* Căn giữa trên mobile */
+  padding: 10px 0;
+}
+
+/* Tiêu đề */
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: white;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+}
 /* Cập nhật các component chính */
 .app-header {
   background: var(--bg-gradient);
