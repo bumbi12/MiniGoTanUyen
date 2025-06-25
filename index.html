@@ -2,298 +2,43 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản lý kho siêu thị</title>
-  <!-- Load Bootstrap & Firebase JS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-  <style>
-    .product-card {
-      transition: transform 0.2s;
-      margin-bottom: 20px;
-    }
-    .product-card:hover {
-      transform: scale(1.03);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-    .note-badge {
-      font-size: 0.8rem;
-      margin-right: 5px;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="container py-4">
-    <!-- Header -->
-    <header class="text-center mb-5">
-      <h1 class="display-4">🛒 QUẢN LÝ KHO SIÊU THỊ</h1>
-      <p class="lead">Theo dõi sản phẩm và số lượng tồn kho</p>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="container">
+        <div class="header-content">
+          <img src="images/logo.png" alt="Logo" class="logo">
+          <h1>Quản lý kho siêu thị</h1>
+        </div>
+      </div>
     </header>
 
-    <!-- Product List -->
-    <div class="row row-cols-1 row-cols-md-3 g-4" id="productList">
-      <!-- Sản phẩm sẽ được thêm bằng JavaScript -->
-    </div>
-
-    <!-- Add Product Button -->
-    <div class="text-center mt-4">
-      <button class="btn btn-success" onclick="showAddProductModal()">
-        ＋ Thêm sản phẩm mới
-      </button>
-    </div>
-  </div>
-
-  <!-- Modal: Thêm sản phẩm -->
-  <div class="modal fade" id="addProductModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Thêm sản phẩm mới</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form id="addProductForm">
-            <div class="mb-3">
-              <label class="form-label">Tên sản phẩm</label>
-              <input type="text" class="form-control" id="productName" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Ảnh (URL)</label>
-              <input type="url" class="form-control" id="productImage">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary" onclick="addProduct()">Lưu</button>
-        </div>
+    <main class="container main-content">
+      <div class="action-bar">
+        <button id="addProductBtn" class="btn btn-primary">
+          <i class="fas fa-plus-circle"></i> Thêm sản phẩm
+        </button>
       </div>
+
+      <div class="row" id="productList"></div>
+    </main>
+
+    <div class="modals">
+      <div class="modal fade" id="productModal" tabindex="-1"></div>
+      <div class="modal fade" id="notesModal" tabindex="-1"></div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/app.js"></script>
   </div>
-
-  <!-- Modal: Thêm ghi chú -->
-  <div class="modal fade" id="addNoteModal" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="noteModalTitle">Thêm ghi chú</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form id="addNoteForm">
-            <div class="mb-3">
-              <label class="form-label">Ngày</label>
-              <input type="date" class="form-control" id="noteDate" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Số lượng</label>
-              <input type="number" class="form-control" id="noteQuantity" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Ghi chú</label>
-              <textarea class="form-control" id="noteRemarks" rows="2"></textarea>
-            </div>
-            <input type="hidden" id="currentProductId">
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-          <button type="button" class="btn btn-primary" onclick="saveNote()">Lưu ghi chú</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal: Xem ghi chú -->
-  <div class="modal fade" id="viewNotesModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Lịch sử nhập kho</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Ngày</th>
-                <th>Số lượng</th>
-                <th>Ghi chú</th>
-                <th>Hành động</th>
-              </tr>
-            </thead>
-            <tbody id="notesTableBody">
-              <!-- Dữ liệu sẽ được thêm bằng JS -->
-            </tbody>
-          </table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Load Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Firebase & App Code -->
-  <script>
-    const firebaseConfig = {
-  apiKey: "AIzaSyCRc5OmLgHgG57MGwkDvPQLHI74Gv58fgg",
-  authDomain: "minigotanuyen.firebaseapp.com",
-  projectId: "minigotanuyen",
-  storageBucket: "minigotanuyen.firebasestorage.app",
-  messagingSenderId: "656079740242",
-  appId: "1:656079740242:web:acf2bc7848c33cd1c7ae8b",
-  measurementId: "G-T5BSB98505"
-};
-
-    // Khởi tạo Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    let addNoteModal = new bootstrap.Modal(document.getElementById('addNoteModal'));
-    let viewNotesModal = new bootstrap.Modal(document.getElementById('viewNotesModal'));
-    let addProductModal = new bootstrap.Modal(document.getElementById('addProductModal'));
-
-    // ===== CÁC HÀM CHÍNH ===== //
-    // 1. Load danh sách sản phẩm
-    function loadProducts() {
-      db.collection("products").onSnapshot((snapshot) => {
-        const productList = document.getElementById('productList');
-        productList.innerHTML = '';
-        
-        snapshot.forEach(doc => {
-          const product = doc.data();
-          productList.innerHTML += `
-            <div class="col">
-              <div class="card product-card h-100">
-                ${product.image ? `<img src="${product.image}" class="card-img-top" alt="${product.name}">` : ''}
-                <div class="card-body">
-                  <h5 class="card-title">${product.name}</h5>
-                  <div class="d-grid gap-2">
-                    <button class="btn btn-primary" onclick="openAddNoteModal('${doc.id}', '${product.name}')">
-                      ➕ Thêm ghi chú
-                    </button>
-                    <button class="btn btn-info" onclick="viewNotes('${doc.id}', '${product.name}')">
-                      📊 Xem lịch sử
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
-        });
-      });
-    }
-
-    // 2. Mở modal thêm ghi chú
-    function openAddNoteModal(productId, productName) {
-      document.getElementById('noteModalTitle').textContent = `Thêm ghi chú cho ${productName}`;
-      document.getElementById('currentProductId').value = productId;
-      document.getElementById('noteDate').valueAsDate = new Date();
-      addNoteModal.show();
-    }
-
-    // 3. Lưu ghi chú vào Firestore
-    function saveNote() {
-      const productId = document.getElementById('currentProductId').value;
-      const date = document.getElementById('noteDate').value;
-      const quantity = document.getElementById('noteQuantity').value;
-      const remarks = document.getElementById('noteRemarks').value;
-
-      db.collection("product_notes").add({
-        productId,
-        date,
-        quantity: parseInt(quantity),
-        remarks,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        alert("✅ Đã thêm ghi chú thành công!");
-        addNoteModal.hide();
-      }).catch(error => {
-        alert("❌ Lỗi: " + error.message);
-      });
-    }
-
-    // 4. Xem lịch sử ghi chú
-    function viewNotes(productId, productName) {
-  const modalTitle = document.querySelector('#viewNotesModal .modal-title');
-  modalTitle.textContent = `Lịch sử nhập: ${productName}`;
-  
-  // Sửa thành product_notes thay vì productNotes (nếu có)
-  db.collection("product_notes")
-    .where("productId", "==", productId)
-    .orderBy("date", "desc")
-    .get()
-    .then((querySnapshot) => {
-      const tbody = document.getElementById('notesTableBody');
-      tbody.innerHTML = '';
-      
-      if (querySnapshot.empty) {
-        tbody.innerHTML = `<tr><td colspan="4">Chưa có dữ liệu nhập kho</td></tr>`;
-        return;
-      }
-
-      querySnapshot.forEach((doc) => {
-        const note = doc.data();
-        tbody.innerHTML += `
-          <tr>
-            <td>${note.date || '---'}</td>
-            <td>${note.quantity || '0'}</td>
-            <td>${note.notes || '---'}</td>
-            <td>
-              <button class="btn btn-sm btn-danger" 
-                      onclick="deleteNote('${doc.id}')">
-                Xóa
-              </button>
-            </td>
-          </tr>
-        `;
-      });
-    })
-    .catch((error) => {
-      console.error("Lỗi khi lấy dữ liệu:", error);
-      });
-  
-  // Hiển thị modal
-  new bootstrap.Modal(document.getElementById('viewNotesModal')).show();
-}
-    // 5. Xóa ghi chú
-    function deleteNote(noteId) {
-      if (confirm("Bạn chắc chắn muốn xóa ghi chú này?")) {
-        db.collection("product_notes").doc(noteId).delete()
-          .then(() => alert("Đã xóa ghi chú!"))
-          .catch(error => alert("Lỗi: " + error));
-      }
-    }
-
-    // 6. Thêm sản phẩm mới
-    function showAddProductModal() {
-      addProductModal.show();
-    }
-
-    function addProduct() {
-      const name = document.getElementById('productName').value;
-      const image = document.getElementById('productImage').value;
-      
-      db.collection("products").add({
-        name,
-        image: image || null
-      }).then(() => {
-        alert("✅ Đã thêm sản phẩm mới!");
-        document.getElementById('addProductForm').reset();
-        addProductModal.hide();
-      }).catch(error => {
-        alert("❌ Lỗi: " + error.message);
-      });
-    }
-
-    // Khởi chạy khi trang load xong
-    window.onload = () => {
-      loadProducts();
-    };
-  </script>
 </body>
 </html>
