@@ -219,36 +219,47 @@
 
     // 4. Xem lịch sử ghi chú
     function viewNotes(productId, productName) {
-      const modalTitle = document.querySelector('#viewNotesModal .modal-title');
-      modalTitle.textContent = `Lịch sử nhập: ${productName}`;
+  const modalTitle = document.querySelector('#viewNotesModal .modal-title');
+  modalTitle.textContent = `Lịch sử nhập: ${productName}`;
+  
+  // Sửa thành product_notes thay vì productNotes (nếu có)
+  db.collection("product_notes")
+    .where("productId", "==", productId)
+    .orderBy("date", "desc")
+    .get()
+    .then((querySnapshot) => {
+      const tbody = document.getElementById('notesTableBody');
+      tbody.innerHTML = '';
       
-      db.collection("product_notes")
-        .where("productId", "==", productId)
-        .orderBy("date", "desc")
-        .onSnapshot((snapshot) => {
-          const tbody = document.getElementById('notesTableBody');
-          tbody.innerHTML = '';
-          
-          snapshot.forEach(doc => {
-            const note = doc.data();
-            tbody.innerHTML += `
-              <tr>
-                <td>${note.date}</td>
-                <td>${note.quantity}</td>
-                <td>${note.remarks || '---'}</td>
-                <td>
-                  <button class="btn btn-sm btn-danger" onclick="deleteNote('${doc.id}')">
-                    Xóa
-                  </button>
-                </td>
-              </tr>
-            `;
-          });
-        });
-      
-      viewNotesModal.show();
-    }
+      if (querySnapshot.empty) {
+        tbody.innerHTML = `<tr><td colspan="4">Chưa có dữ liệu nhập kho</td></tr>`;
+        return;
+      }
 
+      querySnapshot.forEach((doc) => {
+        const note = doc.data();
+        tbody.innerHTML += `
+          <tr>
+            <td>${note.date || '---'}</td>
+            <td>${note.quantity || '0'}</td>
+            <td>${note.notes || '---'}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" 
+                      onclick="deleteNote('${doc.id}')">
+                Xóa
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+    })
+    .catch((error) => {
+      console.error("Lỗi khi lấy dữ liệu:", error);
+      });
+  
+  // Hiển thị modal
+  new bootstrap.Modal(document.getElementById('viewNotesModal')).show();
+}
     // 5. Xóa ghi chú
     function deleteNote(noteId) {
       if (confirm("Bạn chắc chắn muốn xóa ghi chú này?")) {
