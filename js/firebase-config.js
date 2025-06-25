@@ -1,9 +1,6 @@
-// Import Firebase SDK (nếu dùng module)
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-
-// Cấu hình Firebase
-const firebaseConfig = {
+// Thay thế hoàn toàn bằng nội dung này
+if (!firebase.apps.length) {
+  const firebaseConfig = {
   apiKey: "AIzaSyCRc5OmLgHgG57MGwkDvPQLHI74Gv58fgg",
   authDomain: "minigotanuyen.firebaseapp.com",
   projectId: "minigotanuyen",
@@ -12,10 +9,7 @@ const firebaseConfig = {
   appId: "1:656079740242:web:acf2bc7848c33cd1c7ae8b",
   measurementId: "G-T5BSB98505"
 };
+  firebase.initializeApp(firebaseConfig);
+}
 
-// Khởi tạo Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// Export để sử dụng ở file khác
-export { db };
+const db = firebase.firestore();
